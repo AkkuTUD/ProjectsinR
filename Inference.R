@@ -12,33 +12,24 @@ setwd("E:/Subjects/ICS/")
 data <- data.frame(read.csv(file = 'ImmoDataRuhr.csv'))
 
 
-# Summary of data set
+#Summary of data set
 summary(data)
 
-# Group by summary 
-
+#Group by summary 
 group_by(data, regio2) %>%
   summarise(count = n(),mean = mean(sqmPrice, na.rm = TRUE),median = median(sqmPrice,na.rm = TRUE),sd = sd(sqmPrice, na.rm = TRUE), var = var(sqmPrice, na.rm=TRUE)) 
-
-
-#xtable(summary.group.wise, type = "latex", file = "summary_group.tex")
 
                    ##################ASSUMPTIONS#################
 
 #Independent variables
-#
 #Homogeneity
 plot(res.aov, 1)
-#
-#In the plot below, there is no evident relationships between residuals and fitted values (the mean of each groups),
-#which is good. So, we can assume the homogeneity of variances.
+#In the plot below, there is no evident relationships between residuals and fitted values (the mean of each groups),which is good. So, we can assume the homogeneity of variances.
 
+#Normality
 plot(res.aov, 2)
 #As all the points fall approximately along this reference line, we can assume normality.
-#
-#Normality
 
-#or
 
 #Homogeneity
 ggplot(data, aes(x= regio2,y = sqmPrice,fill = regio2))+
@@ -65,13 +56,11 @@ res.aov <- aov(sqmPrice~ regio2, data = data)
 # Summary of the analysis
 anova = summary(res.aov)
 anova
-#xtable(anova, type = "latex", file = "summary_group.tex")
 
 #As the p-value (0.00351) is less than the significance level 0.05, we can conclude that 
 #there are significant differences between the regions and rejecting null hypothesis
 
 #task2
-#
 #A t-test a statistic method used to determine if there is a significant difference 
 #between the means of two groups based on a sample of data.
 
@@ -92,12 +81,6 @@ two_sample_test_without_adj
 two_sample_test_with_adj <- pairwise.t.test(data$sqmPrice, data$regio2,pool.sd = TRUE,
                                             p.adjust.method = 'bon',var.equal =TRUE)
 two_sample_test_with_adj
-
-
-
-
-# xtable(two_sample_test_without_adj, type = "latex", file = "two_sample_test_without_adj.tex")
-# xtable(two_sample_test_with_adj, type = "latex", file = "two_sample_test_with_adj.tex")
 
 
 
